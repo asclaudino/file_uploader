@@ -37,10 +37,10 @@ To run this project locally, follow the steps below:
 3. **Setup Environment Variables**
     ```bash
     touch .env.local
-  And paste it: NEXT_PUBLIC_API_URL=http://localhost:8000
+  - And paste it: NEXT_PUBLIC_API_URL=http://localhost:8000
   
 4. **Running the project**
-    To run the development server: 
+- To run the development server: 
     ```bash
     npm run dev 
-   
+- And the app will be running at  http://localhost:3000
