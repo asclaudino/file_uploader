@@ -27,6 +27,9 @@ export default function Home() {
     try {
       const res = await fetch('https://ocr-invoices-b2we1hjn5-ariel-silva-claudinos-projects.vercel.app/upload', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: formData,
       });
       const result = await res.json();
