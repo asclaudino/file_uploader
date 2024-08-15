@@ -8,6 +8,7 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [response, setResponse] = useState<any>(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files ? e.target.files[0] : null;
@@ -16,9 +17,11 @@ export default function Home() {
 
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!file) {
       alert('Please select a file first!');
+      setLoading(false);
       return;
     }
 
@@ -26,11 +29,8 @@ export default function Home() {
     formData.append('file', file);
 
     try {
-      const res = await fetch('${apiUrl}/upload', {
+      const res = await fetch(`${apiUrl}/upload`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: formData,
       });
       const result = await res.json();
@@ -41,6 +41,8 @@ export default function Home() {
     } catch (error) {
       console.error('Error uploading file:', error);
       setResponse({ error: 'Failed to upload file' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,10 +65,30 @@ export default function Home() {
             Upload
           </button>
         </form>
-
-        {response && (
+        {loading && (
           <div className="mt-4">
-            <pre className="bg-gray-200 p-4 rounded-md">{JSON.stringify(response, null, 2)}</pre>
+            <div className="flex items-center justify-center space-x-2">
+              <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-blue-500 border-t-transparent"></div>
+              <p className="text-lg text-gray-700">Processing, please wait...</p>
+            </div>
+          </div>
+        )}
+
+        {response && !loading && (
+          <div className="mt-4">
+            {/* Display the image and text */}
+            <div className="flex flex-col items-center">
+              <h2 className="text-xl font-medium text-gray-800 mb-2">Uploaded Image:</h2>
+              <img
+                src={response.fileUrl}
+                alt="Uploaded Image"
+                className="max-w-full h-auto rounded-md shadow-md"
+              />
+              <h2 className="text-xl font-medium text-gray-800 mt-6 mb-2">Extracted Text:</h2>
+              <p className="mt-4 text-lg text-gray-700">
+                {response.text}
+              </p>
+            </div>
           </div>
         )}
       </main>
