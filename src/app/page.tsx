@@ -7,6 +7,7 @@ import { useState } from 'react';
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [response, setResponse] = useState<any>(null);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files ? e.target.files[0] : null;
@@ -25,7 +26,7 @@ export default function Home() {
     formData.append('file', file);
 
     try {
-      const res = await fetch('https://ocr-invoices-app.vercel.app/upload', {
+      const res = await fetch('${apiUrl}/upload', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
