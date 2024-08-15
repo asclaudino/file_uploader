@@ -25,7 +25,7 @@ export default function Home() {
     formData.append('file', file);
 
     try {
-      const res = await fetch('https://ocr-invoices-app.vercel.app//upload', {
+      const res = await fetch('https://ocr-invoices-app.vercel.app/upload', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
